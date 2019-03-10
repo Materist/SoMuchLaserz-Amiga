@@ -1,5 +1,4 @@
 
-```javascript
 OK=0
 KOL=1
 
@@ -40,4 +39,4 @@ SPLASHSCREEN:
       End If 
       Wait 2
    Loop
-```
+
