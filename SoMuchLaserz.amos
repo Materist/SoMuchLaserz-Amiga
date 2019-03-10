@@ -1,5 +1,5 @@
 
-'''PureBasic
+```PureBasic
 OK=0
 KOL=1
 
@@ -41,4 +41,4 @@ SPLASHSCREEN:
       Wait 2
    Loop 
 
-'''
+```
