@@ -1,49 +1,55 @@
-OK=0
-KOL=1
+Global BUTFIRE
+Global MAKS
+MAKS=0
 
-Gosub SPLASHSCREEN
+SPLASHSCREEN
 
-MAINMENU:
+Rem *****Do przejscie do instrukcji jak grac*****  
+
+Procedure LDSCR
    Load "AMOS_BANK:AMOS_Music/Music_Bumioh.ABK",15
    Load Iff "asm:GrafikiLaserz/LOADING.PIC",5
    Bank Swap 3,15
    Music 1
-   Do 
-      If Fire(1)
-         Erase All 
-         End 
-      End If 
-   Loop 
+   Repeat 
+      CHECKFIRE
+      BUTFIRE=Param
+   Until BUTFIRE=1
+   Erase All 
+End Proc
 
-SPLASHSCREEN:
-   Do 
-      If OK=0
-         Load Iff "asm:GrafikiLaserz/INTRO.PIC",5
-         Load "asm:GrafikiLaserz/MegaMen/bobek",14
-         Channel 1 To Bob 1
-         Bob 1,200,200,1
-         Anim 1,"(1,60) (2,15)L"
-         Anim On 
-         Load "AMOS_BANK:AMOS_Music/Music_Draconus.ABK",3
-         Music 1
-         OK=1
-      End If 
+Rem ************************************** 
 
-      If KOL=16
-         KOL=1
-      End If 
+Rem *****Do zrobienia procedura wyswietlajaca wskazowki dot. gry*****  
 
-      Ink KOL,7,
-      Text 80,150,"PRESS FIRE BUTTON"
+Procedure TUTORIALSCR
+End Proc
+
+Rem ***************************************
+
+Procedure CHECKFIRE
+   If Fire(1)
+      BUTFIRE=1
+   Else 
+      BUTFIRE=0
+   End If 
+End Proc[BUTFIRE]
+
+
+Procedure KOLTEXT[KOL,LOWKOL,HIGHKOL,X,Y,MSG$]
+
+   If MAKS=0
       KOL=KOL+1
+   Else 
+      KOL=KOL-1
+   End If 
 
-      If Fire(1)
-         Erase 3
-         Erase 5
-         OK=0
-         Gosub MAINMENU
-      End If 
+   If KOL=HIGHKOL
+      MAKS=1
+   End If 
 
-      Wait 2
-   Loop 
+   If KOL=LOWKOL
+      MAKS=0
+   End If 
 
+   Ink KOL,7
