@@ -1,12 +1,12 @@
-Global BUTFIRE
-Global MAKS
+Global BUTFIRE Rem Fire button state
+Global MAKS Rem Max color state for colorful text
 MAKS=0
 
 SPLASHSCREEN
 
-Rem *****Do przejscie do instrukcji jak grac*****  
+Rem *****LOAD SCREEN*****  
 
-Procedure LDSCR
+Procedure LDSCR[CHC]
    Load "AMOS_BANK:AMOS_Music/Music_Bumioh.ABK",15
    Load Iff "asm:GrafikiLaserz/LOADING.PIC",5
    Bank Swap 3,15
@@ -15,17 +15,25 @@ Procedure LDSCR
       CHECKFIRE
       BUTFIRE=Param
    Until BUTFIRE=1
+   BUTFIRE=0
+   Erase All 
+   If CHC=1
+      TUTORIALSCR
+   End If 
+End Proc
+
+Rem *****TUTORIAL SCREEN*****  
+
+Procedure TUTORIALSCR
+   Load Iff "asm:GrafikiLaserz/TUTORIAL.PIC",5
+   Repeat 
+      CHECKFIRE
+      BUTFIRE=Param
+   Until BUTFIRE=1
    Erase All 
 End Proc
 
-Rem ************************************** 
-
-Rem *****Do zrobienia procedura wyswietlajaca wskazowki dot. gry*****  
-
-Procedure TUTORIALSCR
-End Proc
-
-Rem ***************************************
+Rem *****CHECK FIRE PROCEDURE***** 
 
 Procedure CHECKFIRE
    If Fire(1)
@@ -35,6 +43,7 @@ Procedure CHECKFIRE
    End If 
 End Proc[BUTFIRE]
 
+Rem *****DISPLAY TEXT WITH CHANGING COLORS*****
 
 Procedure KOLTEXT[KOL,LOWKOL,HIGHKOL,X,Y,MSG$]
 
@@ -57,8 +66,9 @@ Procedure KOLTEXT[KOL,LOWKOL,HIGHKOL,X,Y,MSG$]
    Wait Vbl 
    Text X,Y,MSG$
 
-
 End Proc[KOL]
+
+Rem ***** SLASHSCREEN *****
 
 Procedure SPLASHSCREEN
    BUTFIRE=0
@@ -79,7 +89,7 @@ Procedure SPLASHSCREEN
    Until BUTFIRE=1
    Erase All 
    BUTFIRE=0
-   LDSCR
+   LDSCR[1]
 End Proc
 
 
