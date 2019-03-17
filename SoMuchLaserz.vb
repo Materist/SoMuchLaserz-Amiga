@@ -1,5 +1,10 @@
-Global BUTFIRE Rem Fire button state
-Global MAKS Rem Max color state for colorful text
+Global BUTFIRE
+Global MAKS
+Global PX
+Global PY
+PX=200
+PY=200
+Global PS
 MAKS=0
 
 SPLASHSCREEN
@@ -62,11 +67,53 @@ Procedure KOLTEXT[KOL,LOWKOL,HIGHKOL,X,Y,MSG$]
    End If 
 
    Ink KOL,7,
-   Wait Vbl 
-   Wait Vbl 
    Text X,Y,MSG$
 
 End Proc[KOL]
+
+Rem ***** READING JOY AND CHANGE X/Y POSITION *****
+
+Procedure MVPL
+
+   If Jup(1)
+      PY=PY-1
+   End If 
+
+   If Jdown(1)
+      PY=PY+1
+   End If 
+
+   If Jright(1)
+      PX=PX+1
+   End If 
+
+   If Jleft(1)
+      PX=PX-1
+   End If 
+
+End Proc
+
+Rem ***** DRAWING BOBS ***** 
+
+Procedure DRB[NR,X,Y,STATE]
+
+   Wait Vbl 
+   If STATE>0
+      Bob NR,X,Y,STATE
+   Else 
+      Bob NR,X,Y,
+   End If 
+
+End Proc
+
+Rem ***** MAIN LOOP *****
+
+Procedure MLOOP
+
+   MVPL
+   DRB[1,PX,PY,0]
+
+End Proc
 
 Rem ***** SLASHSCREEN *****
 
@@ -76,7 +123,7 @@ Procedure SPLASHSCREEN
    Load Iff "asm:GrafikiLaserz/INTRO.PIC",5
    Load "asm:GrafikiLaserz/MegaMen/bobek",14
    Channel 1 To Bob 1
-   Bob 1,200,200,1
+   DRB[1,200,200,1]
    Anim 1,"(1,60) (2,15)L"
    Anim On 
    Load "AMOS_BANK:AMOS_Music/Music_Draconus.ABK",3
@@ -86,6 +133,7 @@ Procedure SPLASHSCREEN
       BUTFIRE=Param
       KOLTEXT[KOL,0,16,80,150,"PRESS START BUTTON"]
       KOL=Param
+      MLOOP
    Until BUTFIRE=1
    Erase All 
    BUTFIRE=0
